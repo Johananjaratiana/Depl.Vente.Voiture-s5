@@ -1,0 +1,5 @@
+# Database configuration
+jdbc.url=jdbc:postgresql://viaduct.proxy.rlwy.net:56783/railway
+jdbc.user=postgres
+jdbc.password=Cg366ef-2GB1Ec2BEafA4G3G12fg-AFD
+jdbc.driver=org.postgresql.Driver
