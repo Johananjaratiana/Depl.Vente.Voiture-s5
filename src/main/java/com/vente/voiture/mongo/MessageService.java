@@ -102,7 +102,7 @@ public class MessageService {
                 Document fromMongo = Message_2.GetOrCreateDocumentByTokenAndUser(collection, users.getId().intValue(), id_other_user, false); 
                 return fromMongo;
             } else {
-                throw new Exception("Erreur de vue de message.");
+                throw new Exception("Pas de message non lue.");
             }
         }catch(MongoException me){
             me.printStackTrace();
