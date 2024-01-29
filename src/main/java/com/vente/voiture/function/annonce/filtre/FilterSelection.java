@@ -82,7 +82,7 @@ public class FilterSelection {
         return sqlParams;
     }
     
-    public List<V_annonce_complet> GetAnnonceComplet(Users users, Connection connection){
+    public List<V_annonce_complet> GetAnnonceComplet(Connection connection){
         List<V_annonce_complet> result = new ArrayList<V_annonce_complet>(); 
         V_annonce_complet temp;
         try {
