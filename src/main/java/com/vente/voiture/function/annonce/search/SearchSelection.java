@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 
 import com.vente.voiture.crud.model.V_annonce_complet;
 import com.vente.voiture.util.SqlParams;
-import com.vente.voiture.ws.security.user.Users;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -31,7 +30,7 @@ public class SearchSelection {
         return sqlParams;
     }
     
-    public List<V_annonce_complet> GetAnnonceComplet(Users users, Connection connection){
+    public List<V_annonce_complet> GetAnnonceComplet(Connection connection){
         List<V_annonce_complet> result = new ArrayList<V_annonce_complet>(); 
         V_annonce_complet temp;
         try {

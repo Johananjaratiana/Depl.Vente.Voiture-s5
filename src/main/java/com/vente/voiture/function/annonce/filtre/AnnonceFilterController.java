@@ -3,7 +3,7 @@ package com.vente.voiture.function.annonce.filtre;
 import java.sql.Connection;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +16,7 @@ import com.vente.voiture.ws.structure.Response;
 @RequestMapping("/api/annonce_filter")
 public class AnnonceFilterController {
 
-    @GetMapping
+    @PostMapping
     public Response GetAllFilteredAnnonce(@RequestBody FilterSelection filterSelection) {
         Response response = new Response();
         try(Connection connection = DatabaseConnection.GetConnection()){
