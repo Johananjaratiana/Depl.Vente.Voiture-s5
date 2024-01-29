@@ -4,7 +4,7 @@ COPY src /home/app/src
 COPY pom.xml /home/app
 # Send you configuration file
 COPY my-config /home/app
-RUN mvn -f /home/app/pom.xml clean package spring-boot:repackage
+RUN mvn -f /home/app/pom.xml clean package
 
 FROM openjdk:11-jre-slim
 # Mettez en parametre le port a utiliser
