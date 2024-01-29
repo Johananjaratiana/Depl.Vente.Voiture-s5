@@ -1,5 +1,5 @@
 # Use OpenJDK 17 as the base image
-FROM openjdk:11-jdk-slim AS build
+FROM openjdk:17-jdk-slim AS build
 
 # Copy your source files and pom.xml into the image
 COPY src /home/app/src
@@ -10,7 +10,7 @@ COPY my-config /home/app
 RUN mvn -f /home/app/pom.xml clean package spring-boot:repackage
 
 # Start a new stage with OpenJDK 17 JRE
-FROM openjdk:11-jre-slim
+FROM openjdk:17-jre-slim
 
 # Set the port environment variable
 ARG PORT
