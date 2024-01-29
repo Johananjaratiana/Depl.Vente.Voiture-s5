@@ -22,6 +22,9 @@ public class V_annonce_en_attente_validation {
     @Column(name="utilisateur")
     private String Utilisateur;
 
+    @Column(name="date_annonce")
+    private java.sql.Date DateAnnonce;
+
     @Column(name="description")
     private String Description;
 
