@@ -1,0 +1,12 @@
+@PostMapping
+public Response createAnnonce(@RequestBody Annonce Annonce, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    Response response = new Response();
+    try{
+        Users users = jwtTokenUtil.validateTokenReturningUsers(userService, authorizationHeader);
+        Annonce.setIdUsers(users.getId().intValue());
+        response.setDataOnSuccess(annonceService.save(Annonce));
+    }catch(Exception ex){
+        response.setError(ex.getMessage());
+    }
+    return response;
+}

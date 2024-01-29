@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 
 import com.vente.voiture.crud.model.V_annonce_complet;
 import com.vente.voiture.util.SqlParams;
-import com.vente.voiture.ws.security.user.Users;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;

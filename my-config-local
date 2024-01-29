@@ -1,0 +1,5 @@
+# Database configuration
+jdbc.url=jdbc:postgresql://localhost:5432/vente_voiture
+jdbc.user=postgres
+jdbc.password=postgres
+jdbc.driver=org.postgresql.Driver
