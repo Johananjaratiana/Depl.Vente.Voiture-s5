@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.PhotoAnnonce;
 import com.vente.voiture.crud.repository.PhotoAnnonceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class PhotoAnnonceService {
     }
 
     // Read
-    public List<PhotoAnnonce> getAllPhotoAnnonce() {
-        return (List<PhotoAnnonce>) photo_annonceRepository.findAll();
+    public List<PhotoAnnonce> getAllphoto_annonce() {
+        return photo_annonceRepository.findAll();
+    }
+
+    // Read
+    public Page<PhotoAnnonce> getAllPhotoAnnonce(Pageable pageable) {
+        return photo_annonceRepository.findAll(pageable);
     }
 
     // GetById
@@ -40,8 +47,8 @@ public class PhotoAnnonceService {
         photo_annonceRepository.deleteById(id);
     }
 
-    public List<PhotoAnnonce> getPhotoAnnonceByIdAnnonce(Integer IdAnnonce) {
-        return photo_annonceRepository.findByIdAnnonce(IdAnnonce);
+    public Page<PhotoAnnonce> getPhotoAnnonceByIdAnnonce(Integer IdAnnonce, Pageable pageable) {
+        return photo_annonceRepository.findByIdAnnonce(IdAnnonce, pageable);
     }
 
     // Add your service methods here

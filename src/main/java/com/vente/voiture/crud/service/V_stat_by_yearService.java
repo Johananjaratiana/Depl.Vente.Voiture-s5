@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.V_stat_by_year;
 import com.vente.voiture.crud.repository.V_stat_by_yearRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +15,12 @@ public class V_stat_by_yearService {
 
     // Read
     public List<V_stat_by_year> getAllV_stat_by_year() {
-        return (List<V_stat_by_year>) v_stat_by_yearRepository.findAll();
+        return v_stat_by_yearRepository.findAll();
+    }
+
+    // Read
+    public Page<V_stat_by_year> getAllV_stat_by_year(Pageable pageable) {
+        return v_stat_by_yearRepository.findAll(pageable);
     }
 
     // GetById

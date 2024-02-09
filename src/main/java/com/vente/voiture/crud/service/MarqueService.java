@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.Marque;
 import com.vente.voiture.crud.repository.MarqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class MarqueService {
     }
 
     // Read
-    public List<Marque> getAllMarque() {
-        return (List<Marque>) marqueRepository.findAll();
+    public List<Marque> getAllmarque() {
+        return marqueRepository.findAll();
+    }
+
+    // Read
+    public Page<Marque> getAllMarque(Pageable pageable) {
+        return marqueRepository.findAll(pageable);
     }
 
     // GetById

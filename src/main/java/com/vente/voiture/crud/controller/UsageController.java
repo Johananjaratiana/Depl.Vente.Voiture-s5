@@ -2,6 +2,8 @@ package com.vente.voiture.crud.controller;
 
 import com.vente.voiture.crud.model.Usage;
 import com.vente.voiture.crud.service.UsageService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
@@ -31,10 +33,24 @@ public class UsageController {
     }
 
     @GetMapping
-    public Response getAllUsage() {
+    public Response getAllusage() {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(usageService.getAllUsage());
+            response.setDataOnSuccess(usageService.getAllusage());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPageusage( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(usageService.getAllUsage(pageable));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }

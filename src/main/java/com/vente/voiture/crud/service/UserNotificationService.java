@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.UserNotification;
 import com.vente.voiture.crud.repository.UserNotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class UserNotificationService {
     }
 
     // Read
-    public List<UserNotification> getAllUserNotification() {
-        return (List<UserNotification>) user_notificationRepository.findAll();
+    public List<UserNotification> getAlluser_notification() {
+        return user_notificationRepository.findAll();
+    }
+
+    // Read
+    public Page<UserNotification> getAllUserNotification(Pageable pageable) {
+        return user_notificationRepository.findAll(pageable);
     }
 
     // GetById
@@ -40,8 +47,8 @@ public class UserNotificationService {
         user_notificationRepository.deleteById(id);
     }
 
-    public List<UserNotification> getUserNotificationByIdUsers(Integer IdUsers) {
-        return user_notificationRepository.findByIdUsers(IdUsers);
+    public Page<UserNotification> getUserNotificationByIdUsers(Integer IdUsers, Pageable pageable) {
+        return user_notificationRepository.findByIdUsers(IdUsers, pageable);
     }
 
     // Add your service methods here

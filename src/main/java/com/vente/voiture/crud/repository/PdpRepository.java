@@ -2,11 +2,15 @@ package com.vente.voiture.crud.repository;
 
 import com.vente.voiture.crud.model.Pdp;
 import org.springframework.data.jpa.repository.Query;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PdpRepository extends JpaRepository<Pdp, Long> {
-    @Query("SELECT pa FROM pdp pa WHERE pa.IdUsers = ?1")
-   List<Pdp> findByIdUsers(Integer IdUsers);
+    @Query("SELECT tbl FROM pdp tbl WHERE tbl.IdUsers = ?1")
+   Page<Pdp> findByIdUsers(Integer IdUsers, Pageable pageable);
+
+   @Query("SELECT tbl FROM pdp tbl")
+   Page<Pdp> findAll(Pageable pageable);
 
 }

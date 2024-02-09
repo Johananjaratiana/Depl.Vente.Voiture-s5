@@ -2,6 +2,8 @@ package com.vente.voiture.crud.controller;
 
 import com.vente.voiture.crud.model.UserNotification;
 import com.vente.voiture.crud.service.UserNotificationService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
@@ -31,10 +33,24 @@ public class UserNotificationController {
     }
 
     @GetMapping
-    public Response getAllUserNotification() {
+    public Response getAlluser_notification() {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(user_notificationService.getAllUserNotification());
+            response.setDataOnSuccess(user_notificationService.getAlluser_notification());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPageuser_notification( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(user_notificationService.getAllUserNotification(pageable));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }
@@ -79,11 +95,14 @@ public class UserNotificationController {
 
 
     @GetMapping("users/{id_users}")
-    public Response getUserNotificationByIdUsers(@PathVariable Integer id_users) {
+    public Response getUserNotificationByIdUsers(@PathVariable Integer id_users, 
+             @RequestParam(defaultValue = "0") int page,
+             @RequestParam(defaultValue = "10") int size) {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(user_notificationService.getUserNotificationByIdUsers(id_users));
-        }catch(Exception ex){
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(user_notificationService.getUserNotificationByIdUsers(id_users, pageable)); 
+         }catch(Exception ex){
             response.setError(ex.getMessage());
         }
         return response;

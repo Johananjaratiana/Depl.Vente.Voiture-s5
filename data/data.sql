@@ -1,38 +1,34 @@
-CREATE SEQUENCE "public".annonce_favoris_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".annonce_favoris_id_seq START WITH 3 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".annonce_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".annonce_id_seq START WITH 20 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".couleur_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".couleur_id_seq START WITH 10 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".energie_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".energie_id_seq START WITH 4 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".etat_annonce_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".marque_id_seq START WITH 19 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".marque_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".modele_id_seq START WITH 10 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".modele_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".photo_annonce_id_seq START WITH 35 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".pdp_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".profil_utilisateur_id_seq START WITH 3 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".photo_annonce_id_seq START WITH 1 INCREMENT BY 1;
-
-CREATE SEQUENCE "public".profil_utilisateur_id_seq START WITH 1 INCREMENT BY 1;
-
-CREATE SEQUENCE "public".taille_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".taille_id_seq START WITH 8 INCREMENT BY 1;
 
 CREATE SEQUENCE "public".token_id_seq START WITH 1 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".transmission_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".transmission_id_seq START WITH 5 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".type_annonce_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".type_annonce_id_seq START WITH 3 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".type_moteur_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".type_moteur_id_seq START WITH 7 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".usage_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".usage_id_seq START WITH 4 INCREMENT BY 1;
 
-CREATE SEQUENCE "public".users_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE "public".users_id_seq START WITH 10 INCREMENT BY 1;
 
-CREATE  TABLE "public".couleur ( 
+CREATE  TABLE "public".couleur (
 	id                   integer DEFAULT nextval('couleur_id_seq'::regclass) NOT NULL  ,
 	nom                  varchar(50)  NOT NULL  ,
 	rgb                  varchar  NOT NULL  ,
@@ -165,7 +161,7 @@ CREATE  TABLE "public".annonce_favoris (
  );
 
 CREATE  TABLE "public".etat_annonce ( 
-	id                   integer DEFAULT nextval('etat_annonce_id_seq'::regclass) NOT NULL  ,
+	id                   integer  NOT NULL  ,
 	id_annonce           integer  NOT NULL  ,
 	carrosserie          integer  NOT NULL  ,
 	siege                integer  NOT NULL  ,
@@ -183,7 +179,7 @@ CREATE  TABLE "public".etat_annonce (
 CREATE INDEX idx_etat_annonce ON "public".etat_annonce  ( id_annonce );
 
 CREATE  TABLE "public".pdp ( 
-	id                   integer DEFAULT nextval('pdp_id_seq'::regclass) NOT NULL  ,
+	id                   integer  NOT NULL  ,
 	id_users             integer  NOT NULL  ,
 	image                varchar  NOT NULL  ,
 	CONSTRAINT pk_pdp PRIMARY KEY ( id ),
@@ -210,12 +206,26 @@ CREATE  TABLE "public".token (
  );
 
 CREATE  TABLE "public".user_notification ( 
-	id                   serial  NOT NULL  ,
+	id                   integer NOT NULL  ,
 	id_users             integer  NOT NULL  ,
 	token                varchar(255)  NOT NULL  ,
 	CONSTRAINT pk_users_notification PRIMARY KEY ( id ),
 	CONSTRAINT fk_users_notification_users FOREIGN KEY ( id_users ) REFERENCES "public".users( id ) ON DELETE CASCADE ON UPDATE CASCADE 
  );
+
+CREATE OR REPLACE FUNCTION public.vider_toutes_les_tables()
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    table_record record;
+BEGIN
+    FOR table_record IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+        EXECUTE 'DELETE FROM ' || quote_ident(table_record.tablename);
+    END LOOP;
+END;
+$function$
+;
 
 CREATE VIEW "public".v_annonce_complet AS  SELECT a.id,
     a.id_marque,
@@ -386,7 +396,8 @@ CREATE VIEW "public".v_annonce_en_attente_validation AS  SELECT a.id,
     (((m.nom)::text || ' '::text) || (mo.nom)::text) AS voiture,
     a.description,
     (((u.nom)::text || ' '::text) || (u.prenom)::text) AS utilisateur,
-    a.prix_vente
+    a.prix_vente,
+    a.date_annonce
    FROM (((annonce a
      JOIN users u ON ((a.id_users = u.id)))
      JOIN marque m ON ((a.id_marque = m.id)))
@@ -490,6 +501,15 @@ CREATE VIEW "public".v_count_annonce_vendu_current_month AS  SELECT count(*) AS 
 CREATE VIEW "public".v_count_annonce_vendu_current_year AS  SELECT count(*) AS nb_annonce_vendu
    FROM annonce a
   WHERE ((a.status = 20) AND (EXTRACT(year FROM a.date_annonce) = EXTRACT(year FROM CURRENT_DATE)));
+
+CREATE VIEW "public".v_landing_page AS  SELECT ( SELECT count(*) AS count
+           FROM users) AS nb_utilisateurs,
+    ( SELECT count(*) AS count
+           FROM annonce) AS nb_annonces,
+    ( SELECT count(*) AS count
+           FROM annonce
+          WHERE (annonce.status = 20)) AS nb_vendues,
+    '-1'::integer AS id;
 
 CREATE VIEW "public".v_latest_annonce_vendu AS  SELECT v_annonce_complet.id,
     v_annonce_complet.id_marque,
@@ -663,13 +683,70 @@ CREATE VIEW "public".v_user_ordered_by_commission AS  SELECT u.id,
   ORDER BY uc.commission DESC;
 
 
-INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 1, 'Blanc', '#fff', 0);
-INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 2, 'Noir', '#000', 0);
-INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 3, 'Rouge', 'red', 0);
-INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 4, 'Vert', 'Green', 0);
+CREATE MATERIALIZED VIEW "public".mv_annonce_complet AS  SELECT v_annonce_complet.id,
+    v_annonce_complet.id_marque,
+    v_annonce_complet.id_modele,
+    v_annonce_complet.version,
+    v_annonce_complet.nb_place,
+    v_annonce_complet.description,
+    v_annonce_complet.prix_vente,
+    v_annonce_complet.consommation,
+    v_annonce_complet.nb_vitesse,
+    v_annonce_complet.id_type_moteur,
+    v_annonce_complet.puissance,
+    v_annonce_complet.id_type_annonce,
+    v_annonce_complet.date_annonce,
+    v_annonce_complet.status,
+    v_annonce_complet.id_users,
+    v_annonce_complet.id_energie,
+    v_annonce_complet.id_transmission,
+    v_annonce_complet.id_usage,
+    v_annonce_complet.id_taille,
+    v_annonce_complet.km_effectue,
+    v_annonce_complet.id_couleur,
+    v_annonce_complet.numero,
+    v_annonce_complet.nom_marque,
+    v_annonce_complet.nom_modele,
+    v_annonce_complet.nom_type_moteur,
+    v_annonce_complet.nom_type_annonce,
+    v_annonce_complet.commission_type_annonce,
+    v_annonce_complet.niveau_type_annonce,
+    v_annonce_complet.nom_users,
+    v_annonce_complet.prenom_users,
+    v_annonce_complet.email_users,
+    v_annonce_complet.telephone_users,
+    v_annonce_complet.nom_energie,
+    v_annonce_complet.nom_transmission,
+    v_annonce_complet.nom_usage,
+    v_annonce_complet.nom_taille,
+    v_annonce_complet.etat_carrosserie,
+    v_annonce_complet.etat_siege,
+    v_annonce_complet.etat_tableau_bord,
+    v_annonce_complet.etat_moteur,
+    v_annonce_complet.etat_freinage,
+    v_annonce_complet.etat_transmission,
+    v_annonce_complet.etat_pneu,
+    v_annonce_complet.etat_electronique,
+    v_annonce_complet.etat_suspension,
+    v_annonce_complet.nom_couleur,
+    v_annonce_complet.rgb_couleur,
+    v_annonce_complet.image
+   FROM v_annonce_complet;
+
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 1, 'Blanc', '#FFFFFF', 1);
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 2, 'Noir', '#000000', 1);
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 3, 'Rouge', '#F12424', 1);
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 4, 'Vert', '#3BED14', 1);
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 5, 'Gris', '#A4A6A4', 1);
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 6, 'Jaune', '#F4D03F', 1);
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 7, 'Bleu', '#3498DB', 1);
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 8, 'Rose', '#F5B7B1', 1);
+INSERT INTO "public".couleur( id, nom, rgb, status ) VALUES ( 9, 'Violet', '#F5B7B1', 1);
+
 INSERT INTO "public".energie( id, nom, status ) VALUES ( 1, 'Essence', 0);
 INSERT INTO "public".energie( id, nom, status ) VALUES ( 2, 'Diesel', 0);
 INSERT INTO "public".energie( id, nom, status ) VALUES ( 3, 'Électrique', 0);
+
 INSERT INTO "public".marque( id, nom, status ) VALUES ( 1, 'Toyota', 0);
 INSERT INTO "public".marque( id, nom, status ) VALUES ( 2, 'Suzuki', 0);
 INSERT INTO "public".marque( id, nom, status ) VALUES ( 3, 'Nissan', 0);
@@ -685,12 +762,22 @@ INSERT INTO "public".marque( id, nom, status ) VALUES ( 12, 'Chevrolet', 0);
 INSERT INTO "public".marque( id, nom, status ) VALUES ( 13, 'Peugeot', 0);
 INSERT INTO "public".marque( id, nom, status ) VALUES ( 14, 'Kia', 0);
 INSERT INTO "public".marque( id, nom, status ) VALUES ( 15, 'Fiat', 0);
+INSERT INTO "public".marque( id, nom, status ) VALUES ( 16, 'Porche', 1);
+INSERT INTO "public".marque( id, nom, status ) VALUES ( 17, 'Mazda', 1);
+INSERT INTO "public".marque( id, nom, status ) VALUES ( 18, 'MINI Cooper', 1);
+
 INSERT INTO "public".modele( id, nom, status ) VALUES ( 1, 'Arteon', 0);
 INSERT INTO "public".modele( id, nom, status ) VALUES ( 2, 'Celestiq', 0);
 INSERT INTO "public".modele( id, nom, status ) VALUES ( 3, 'CR-V', 0);
 INSERT INTO "public".modele( id, nom, status ) VALUES ( 4, 'Panamera', 0);
-INSERT INTO "public".profil_utilisateur( id, nom ) VALUES ( 3, 'admin');
-INSERT INTO "public".profil_utilisateur( id, nom ) VALUES ( 4, 'user');
+INSERT INTO "public".modele( id, nom, status ) VALUES ( 6, 'RAV4 XLE', 1);
+INSERT INTO "public".modele( id, nom, status ) VALUES ( 7, '3 GX', 1);
+INSERT INTO "public".modele( id, nom, status ) VALUES ( 8, 'Hardtop', 1);
+INSERT INTO "public".modele( id, nom, status ) VALUES ( 9, 'X5', 1);
+
+INSERT INTO "public".profil_utilisateur( id, nom ) VALUES ( 1, 'admin');
+INSERT INTO "public".profil_utilisateur( id, nom ) VALUES ( 2, 'user');
+
 INSERT INTO "public".taille( id, nom, status ) VALUES ( 1, 'Sous-compacte', 0);
 INSERT INTO "public".taille( id, nom, status ) VALUES ( 2, 'Compacte', 0);
 INSERT INTO "public".taille( id, nom, status ) VALUES ( 3, 'Intermédiaire', 0);
@@ -698,44 +785,74 @@ INSERT INTO "public".taille( id, nom, status ) VALUES ( 4, 'Full-Size', 0);
 INSERT INTO "public".taille( id, nom, status ) VALUES ( 5, 'Fourgonnette', 0);
 INSERT INTO "public".taille( id, nom, status ) VALUES ( 6, 'Camion', 0);
 INSERT INTO "public".taille( id, nom, status ) VALUES ( 7, 'Berlin', 0);
-INSERT INTO "public".transmission( id, nom, status ) VALUES ( 2, 'Boîte de vitesses manuelle', 0);
-INSERT INTO "public".transmission( id, nom, status ) VALUES ( 3, 'Boîte de vitesses automatique', 0);
-INSERT INTO "public".transmission( id, nom, status ) VALUES ( 4, 'Boîte de vitesses séquentielle', 0);
-INSERT INTO "public".transmission( id, nom, status ) VALUES ( 5, 'Boîte de vitesses robotisée', 0);
-INSERT INTO "public".transmission( id, nom, status ) VALUES ( 6, 'Boîte de vitesses à variations continues', 0);
-INSERT INTO "public".transmission( id, nom, status ) VALUES ( 7, 'Boîte de vitesses à embrayage hydraulique', 0);
-INSERT INTO "public".transmission( id, nom, status ) VALUES ( 8, 'Boîte de vitesses de type H', 0);
-INSERT INTO "public".transmission( id, nom, status ) VALUES ( 9, 'Boîte de vitesses à variations continues', 0);
-INSERT INTO "public".type_annonce( id, nom, status, commission, niveau ) VALUES ( 1, 'Annonces Sponsorisées', 0, 0.01, 10);
-INSERT INTO "public".type_annonce( id, nom, status, commission, niveau ) VALUES ( 2, 'Annonces Premium', 0, 0.02, 20);
-INSERT INTO "public".type_annonce( id, nom, status, commission, niveau ) VALUES ( 3, 'Annonces Featured', 0, 0.03, 30);
-INSERT INTO "public".type_annonce( id, nom, status, commission, niveau ) VALUES ( 4, 'Annonces VIP', 0, 0.04, 40);
-INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 1, 'Moteur à explosion', 0);
-INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 2, 'Moteur à combustion', 0);
-INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 3, 'Moteur électrique', 0);
-INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 4, 'Moteur en étoile', 0);
-INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 5, 'Moteur à plat', 0);
-INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 6, 'Moteur en ligne', 0);
-INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 7, 'Moteur en V', 0);
-INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 8, 'Moteur en W', 0);
+
+INSERT INTO "public".transmission( id, nom, status ) VALUES ( 1, 'Manuelle', 1);
+INSERT INTO "public".transmission( id, nom, status ) VALUES ( 2, 'Automatique', 1);
+INSERT INTO "public".transmission( id, nom, status ) VALUES ( 3, 'Séquentielle', 1);
+INSERT INTO "public".transmission( id, nom, status ) VALUES ( 4, 'Robotisée', 1);
+
+INSERT INTO "public".type_annonce( id, nom, status, commission, niveau ) VALUES ( 1, 'Annonces Simple', 0, 0.05, 10);
+INSERT INTO "public".type_annonce( id, nom, status, commission, niveau ) VALUES ( 2, 'Annonces Premium', 0, 0.1, 20);
+
+INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 1, 'Explosion', 1);
+INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 2, 'Combustion', 1);
+INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 3, 'Electrique', 1);
+INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 4, 'Etoile', 1);
+INSERT INTO "public".type_moteur( id, nom, status ) VALUES ( 6, 'En ligne', 1);
+
 INSERT INTO "public"."usage"( id, nom, status ) VALUES ( 1, 'Quotidienne', 0);
-INSERT INTO "public"."usage"( id, nom, status ) VALUES ( 2, 'Transport de marchandises', 0);
 INSERT INTO "public"."usage"( id, nom, status ) VALUES ( 3, 'Loisir et tourisme', 0);
-INSERT INTO "public".users( id, idprofile, nom, mdp, prenom, dtn, addresse, email, telephone ) VALUES ( 9, 3, 'ANDRIANAIVOSOA', 'johan', 'Johan Anjaratiana', '2003-08-26', 'III AB 50 Andrononobe', 'johan@gmail.com', '+261 89 692 62');
-INSERT INTO "public".users( id, idprofile, nom, mdp, prenom, dtn, addresse, email, telephone ) VALUES ( 13, 4, 'MAMIARILAZA', 'to', 'To', '2007-01-12', 'TD 001 Tsididy', 'to@gmail.com', '+261 34 14 517 43');
-INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 5, 1, 2, '1.0', 18, 'No desc', 200000.0, 8.0, 5, 2, 1500, 1, '2024-01-14', 20, 9, 2, 2, 1, 3, 100.0, 3, '1234 TAB');
-INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 6, 2, 3, '1.0', 18, 'No desc', 250000.0, 5.0, 4, 2, 1500, 3, '2024-10-04', 20, 13, 2, 2, 1, 3, 100.0, 1, '1234 TAB');
-INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 4, 1, 1, '1.0', 18, 'No desc', 150000.0, 10.0, 5, 2, 1500, 2, '2024-01-12', 20, 9, 2, 2, 1, 3, 100.0, 2, '1234 TAB');
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 4, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA1MDU1OTk5LCJleHAiOjE3MDUwNTk1OTl9.Qy389nxZ_Ur9x2J83m8G-5fZh6pTeCFgham5XQbvQHw7_-FCuBlrAD54kTZayAZwQdqWyXzXMnVABtKtMzKjTg', '2024-01-12', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 5, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA1MDU2MTc4LCJleHAiOjE3MDUwNTk3Nzh9.Q-srh8WjdA9_kYae54lVm0gfbeh2bRtg-TUFgJQZlapQ9fVGAIvEE8eY8JzwyBoFMXVesDZPHvSIQLXMdxKmGA', '2024-01-12', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 6, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA1MjI2NjQ5LCJleHAiOjE3MDUyMzAyNDl9.cWXATlKTE6Ay0lCpu5ZEXQu2YX--aGGqDML_R89iexv26_9S2UH-xKE3qe4_OAdLerUD7KnRQkboZpXZ9M0CXQ', '2024-01-14', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 7, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA1MjI2NjczLCJleHAiOjE3MDUyMzAyNzN9.vNNPyEDTybLklLbChfSp99shR9VcjgsKE6sfFyXvstzIoqA0Fx0Tmw6pZhBsq0wp0UeloZRtfSSSGrqX2IRhxg', '2024-01-14', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 8, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA1MjI2Njg4LCJleHAiOjE3MDUyMzAyODh9.QxXFYxI7r_I65TkiuQHg3eYdZKHYpnL1JaR6bwQQVg5cZy0-8TUjmZFdonKYo_sGqRziblX-uvw0EXxSNhoHiQ', '2024-01-14', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 9, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA1MzgxNDMwLCJleHAiOjE3MDU0Njc4MzB9.z3k0yHJHh6zYKACPMb2bylRWBLvd558VObaht-h5Ym9JciDSlDtbXA1R5L9R4iR6jZ3_20MehvzuYdRBbavA7Q', '2024-01-17', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 10, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA1NjUxNTgwLCJleHAiOjE3MDU3Mzc5ODB9.Tw_LGtPGebFgatE2_-5bp5klWfZe_RDHFye9HQFaQ-9_8hxmldncCFNe2_bbPKODrcSVaGubNwt0zRFakMLZmA', '2024-01-20', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 11, 13, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMyIsImlhdCI6MTcwNTY1NDYzNSwiZXhwIjoxNzA1NzQxMDM1fQ.DOEBSNMtkl6qcTkGJ05EZjtC-XnsSMCQj_YMegN8GT8l-Pp9HAGbr_ohksIv2mJbn27Cm3AEjFRb4MUDDPq5Kw', '2024-01-20', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 12, 13, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMyIsImlhdCI6MTcwNTc2Mjk4MiwiZXhwIjoxNzA1ODQ5MzgyfQ.pFrGtzFonMdYPqG5ucWWSX6dIW6NtqbqSaMh7d57eLCFqogknpxWYBChRjhyUAKqvoVNib2QGaRRJY2wLxlEKQ', '2024-01-21', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 13, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA2MDk1MjMzLCJleHAiOjE3MDYxODE2MzN9.DHiW6tgnZTjzNq6OukNkIO_6cSNu-b781bN1xJdqjrtKyNCz0gZ4vEzsZvriW6w5aU54MWQN1D7qOfVvkrKXwA', '2024-01-25', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 14, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA2Mjk2MjUzLCJleHAiOjE3MDYzODI2NTN9.1-J0G_fWbbvGGdhIMYeNeJdtfwEdCQdHTvs1RDZN4vmSIXki2MmSHUtXRhsMgHOZjAqFgx9_h1uF9-Eu3fkGVQ', '2024-01-27', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 15, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA2Mjk2NDc1LCJleHAiOjE3MDYzODI4NzV9.232upmUaOlmCZv1pYA81yMDDh-lUeGTqg8ecVG2HWJQltCYX6UJMmdrrNnb0JSrUekizurntU1RllqrU20GCaA', '2024-01-27', true);
-INSERT INTO "public".token( id, idusers, token, dtexp, isvalidate ) VALUES ( 16, 9, 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5IiwiaWF0IjoxNzA2Mjk2NTk3LCJleHAiOjE3MDYzODI5OTd9.HfXUgseeblThAqWHox0UWNr1sO90I1EqgBzNr2BjM3rh7rseTnD5d251aAQ72xK6wJcqFOGWhM3CCMFn7H2wHA', '2024-01-27', true);
+INSERT INTO "public"."usage"( id, nom, status ) VALUES ( 2, 'Transport', 1);
+
+INSERT INTO "public".users( id, idprofile, nom, mdp, prenom, dtn, addresse, email, telephone ) VALUES ( 6, 2, 'Mamiarilaza', 'to', 'To', '2004-01-12', 'TD 001 Tsididy', 'to@gmail.com', '+261341451743');
+INSERT INTO "public".users( id, idprofile, nom, mdp, prenom, dtn, addresse, email, telephone ) VALUES ( 7, 2, 'Anjaratiana', 'johan', 'Johan', '2003-08-26', 'III AB 50 Andrononobe', 'johan@gmail.com', '+261348969262');
+INSERT INTO "public".users( id, idprofile, nom, mdp, prenom, dtn, addresse, email, telephone ) VALUES ( 8, 2, 'Rakotoarison', 'gael', 'Tiavina Gael', '2003-08-08', 'Lot H 121 TER A Alasora', 'gael@gmail.com', '+261326470822');
+INSERT INTO "public".users( id, idprofile, nom, mdp, prenom, dtn, addresse, email, telephone ) VALUES ( 9, 2, 'raby', 'dio', 'Dio', '2004-01-29', 'Andoharanofotsy', 'dio@gmail.com', '+2613290093');
+
+INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 6, 7, 9, '2018', 5, 'Plongez dans l''excellence automobile avec la BMW X5 2018. Dotée d''un moteur puissant, elle offre une performance exceptionnelle. Son design allie élégance et sportivité, aussi bien à l''intérieur qu''à l''extérieur. Équipée des dernières technologies, elle garantit une conduite sûre et connectée. Polyvalente et confortable, elle est parfaite pour chaque trajet. Entretien méticuleux assurant une longévité exceptionnelle. Ne manquez pas l''opportunité de posséder cette SUV qui incarne le luxe et la sophistication. Planifiez un essai routier dès aujourd''hui pour découvrir une expérience de conduite inégalée.', 6.0E8, 10.0, 6, 2, 310, 2, '2024-01-29', 0, 6, 2, 2, 1, 3, 32000.0, 1, '1212 TBA');
+INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 9, 16, 4, '1', 5, 'Plongez dans le summum du luxe automobile avec la Porsche Panamera Turbo First 2017. Cette berline sportive incarne l''élégance raffinée et la puissance brute. Animée par un moteur suralimenté, elle offre des performances de classe mondiale, tandis que son design avant-gardiste et son intérieur somptueux créent une expérience de conduite inégalée.', 5.0E8, 9.0, 7, 1, 320, 1, '2024-01-29', 0, 7, 2, 2, 1, 4, 15400.0, 2, '1213 TBE');
+INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 8, 18, 8, 'S', 4, 'Découvrez l''essence du style et du dynamisme avec la MINI Cooper Hardtop S 2007. Cette icône intemporelle allie un design distinctif à une performance pétillante, vous offrant une expérience de conduite inimitable. Son moteur agile et sa maniabilité exceptionnelle font de chaque trajet un véritable plaisir, tandis que son intérieur élégant et bien conçu crée une ambiance accueillante.', 1.0E8, 6.0, 5, 2, 150, 2, '2024-01-29', 10, 7, 1, 1, 1, 1, 35000.0, 5, '2309 TBG');
+INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 10, 1, 6, '1.0', 5, 'Explorez le monde avec style et confort à bord du Toyota RAV4 XLE 2017. Cette SUV polyvalente incarne la fiabilité légendaire de Toyota et offre une expérience de conduite dynamique. Avec son design moderne, son intérieur spacieux et ses fonctionnalités avancées, le RAV4 XLE 2017 est prêt à vous accompagner dans toutes vos aventures.', 2.0E8, 8.8, 5, 2, 280, 2, '2024-01-29', 10, 8, 1, 3, 1, 3, 5000.0, 5, '1432 TBG');
+INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 19, 2, 1, '2', 5, '', 3.0E8, 6.0, 5, 1, 300, 1, '2024-02-05', 0, 8, 2, 1, 1, 5, 1000.0, 1, '1212 TBG');
+INSERT INTO "public".annonce( id, id_marque, id_modele, "version", nb_place, description, prix_vente, consommation, nb_vitesse, id_type_moteur, puissance, id_type_annonce, date_annonce, status, id_users, id_energie, id_transmission, id_usage, id_taille, km_effectue, id_couleur, numero ) VALUES ( 7, 17, 7, '4', 5, 'Découvrez l''alliance parfaite de l''élégance et de la performance avec la Mazda 3 GX4 2015. Son design moderne et sportif se marie à une conduite dynamique grâce à son moteur réactif et économe en carburant. L''intérieur raffiné offre un confort exceptionnel, tandis que les technologies avancées, telles que l''infodivertissement intégré et les systèmes de sécurité, ajoutent une touche de modernité. Avec un entretien suivi rigoureux, cette Mazda 3 GX4 2015 est prête à vous offrir une expérience de conduite exceptionnelle. Ne manquez pas l''opportunité de posséder cette berline compacte qui allie style et performance. Planifiez votre essai routier dès maintenant pour ressentir le plaisir de conduire cette Mazda 3.', 2.5E8, 7.5, 5, 1, 240, 1, '2024-01-29', 10, 6, 1, 2, 3, 4, 10000.0, 2, '2314 TBU');
+
+INSERT INTO "public".annonce_favoris( id, id_users, id_annonce, status ) VALUES ( 1, 6, 6, 0);
+INSERT INTO "public".annonce_favoris( id, id_users, id_annonce, status ) VALUES ( 2, 6, 9, 0);
+
+INSERT INTO "public".etat_annonce( id, id_annonce, carrosserie, siege, tableau_bord, moteur, freinage, transmission, pneu, electronique, suspension ) VALUES ( 7, 7, 10, 10, 10, 10, 10, 10, 10, 10, 10);
+INSERT INTO "public".etat_annonce( id, id_annonce, carrosserie, siege, tableau_bord, moteur, freinage, transmission, pneu, electronique, suspension ) VALUES ( 8, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10);
+INSERT INTO "public".etat_annonce( id, id_annonce, carrosserie, siege, tableau_bord, moteur, freinage, transmission, pneu, electronique, suspension ) VALUES ( 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10);
+INSERT INTO "public".etat_annonce( id, id_annonce, carrosserie, siege, tableau_bord, moteur, freinage, transmission, pneu, electronique, suspension ) VALUES ( 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10);
+INSERT INTO "public".etat_annonce( id, id_annonce, carrosserie, siege, tableau_bord, moteur, freinage, transmission, pneu, electronique, suspension ) VALUES ( 6, 6, 8, 10, 9, 8, 10, 10, 7, 10, 10);
+INSERT INTO "public".etat_annonce( id, id_annonce, carrosserie, siege, tableau_bord, moteur, freinage, transmission, pneu, electronique, suspension ) VALUES ( 19, 19, 10, 10, 10, 10, 10, 10, 10, 10, 10);
+
+INSERT INTO "public".pdp( id, id_users, image ) VALUES ( 7, 7, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/709e1b88-d67f-424b-b47c-68a5528e2c3c.png?alt=media');
+INSERT INTO "public".pdp( id, id_users, image ) VALUES ( 8, 8, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/3f607442-3d68-4070-9739-737678d86ab7.png?alt=media');
+INSERT INTO "public".pdp( id, id_users, image ) VALUES ( 6, 6, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/7cd52cc4-56d4-4e28-9a0c-26d6d64924af.png?alt=media');
+
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 7, 6, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/c2260030-bf07-4248-8f33-77484196f807.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 8, 6, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/df646c47-f28a-4dc6-ad91-4ffe973fdeca.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 9, 6, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/52a7c61e-c462-4d0b-bc9c-594fb6a991ff.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 10, 6, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/2434c0d5-70a9-498b-a6f9-bff792d60bd2.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 11, 6, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/42fd9182-5cc2-404c-9605-2a8645b2c17d.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 12, 7, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/d1f7322e-21d2-4a9f-ae1b-9b316bcb5b60.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 13, 7, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/ee4f5eb0-4b2a-4353-ae71-6b620e978d1c.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 14, 7, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/98918e44-eb47-4dc5-9717-6b3de039106e.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 15, 7, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/7cf663f9-17b5-46a0-9009-20349201a6e8.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 16, 7, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/363ef087-c34b-4d74-ba56-f1f5874c5ae4.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 17, 8, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/7af1c089-fac8-4704-8ef5-d40b912fc900.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 18, 8, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/c139b938-432b-4e22-b18f-6e286b69d19a.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 19, 8, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/2994093f-f1d8-47bb-a136-18bfffbbc3ad.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 20, 8, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/4cf2bc79-5b11-4c41-8258-71b9fa8ac53c.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 21, 8, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/5570fa4b-d47e-4df2-8376-c2e7a9999c40.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 22, 9, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/5a0d4bf9-c306-4ac4-aa29-10b3fd51e5ba.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 23, 9, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/caff31bf-abbc-48e5-8e09-ad295323f633.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 24, 9, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/0a858ee2-acdc-461c-adb1-7caf271d4c12.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 25, 9, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/46585ede-6d9d-45dd-affe-e9d7e3e0f42a.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 26, 10, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/b2aac415-5f4a-4924-9da6-b24cb612b7bd.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 27, 10, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/f5a9764b-57f4-43a7-86f5-3923f425ffdd.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 28, 10, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/8d03666f-b4f0-4d36-9d22-8c77cf94cee3.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 29, 10, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/3c5c6fd0-4f0e-4869-839a-d9ed54023c2e.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 30, 10, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/e4f31b7a-c089-46e7-a2ad-b359db8a72d8.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 33, 19, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/1ff506d3-aa9c-4351-96d7-844a1256db64.png?alt=media');
+INSERT INTO "public".photo_annonce( id, id_annonce, image ) VALUES ( 34, 19, 'https://firebasestorage.googleapis.com/v0/b/cloud-image-vente-voiture.appspot.com/o/8c0ce89b-436d-4642-bd6d-c873d4cdf28e.png?alt=media');

@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.V_annonce_complet_current_month;
 import com.vente.voiture.crud.repository.V_annonce_complet_current_monthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +15,12 @@ public class V_annonce_complet_current_monthService {
 
     // Read
     public List<V_annonce_complet_current_month> getAllV_annonce_complet_current_month() {
-        return (List<V_annonce_complet_current_month>) v_annonce_complet_current_monthRepository.findAll();
+        return v_annonce_complet_current_monthRepository.findAll();
+    }
+
+    // Read
+    public Page<V_annonce_complet_current_month> getAllV_annonce_complet_current_month(Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findAll(pageable);
     }
 
     // GetById
@@ -21,44 +28,44 @@ public class V_annonce_complet_current_monthService {
         return v_annonce_complet_current_monthRepository.findById(id);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdModele(Integer IdModele) {
-        return v_annonce_complet_current_monthRepository.findByIdModele(IdModele);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdModele(Integer IdModele, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdModele(IdModele, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdMarque(Integer IdMarque) {
-        return v_annonce_complet_current_monthRepository.findByIdMarque(IdMarque);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdMarque(Integer IdMarque, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdMarque(IdMarque, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdTypeMoteur(Integer IdTypeMoteur) {
-        return v_annonce_complet_current_monthRepository.findByIdTypeMoteur(IdTypeMoteur);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdTypeMoteur(Integer IdTypeMoteur, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdTypeMoteur(IdTypeMoteur, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdTaille(Integer IdTaille) {
-        return v_annonce_complet_current_monthRepository.findByIdTaille(IdTaille);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdTaille(Integer IdTaille, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdTaille(IdTaille, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdUsers(Integer IdUsers) {
-        return v_annonce_complet_current_monthRepository.findByIdUsers(IdUsers);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdUsers(Integer IdUsers, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdUsers(IdUsers, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdEnergie(Integer IdEnergie) {
-        return v_annonce_complet_current_monthRepository.findByIdEnergie(IdEnergie);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdEnergie(Integer IdEnergie, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdEnergie(IdEnergie, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdTransmission(Integer IdTransmission) {
-        return v_annonce_complet_current_monthRepository.findByIdTransmission(IdTransmission);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdTransmission(Integer IdTransmission, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdTransmission(IdTransmission, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdUsage(Integer IdUsage) {
-        return v_annonce_complet_current_monthRepository.findByIdUsage(IdUsage);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdUsage(Integer IdUsage, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdUsage(IdUsage, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdCouleur(Integer IdCouleur) {
-        return v_annonce_complet_current_monthRepository.findByIdCouleur(IdCouleur);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdCouleur(Integer IdCouleur, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdCouleur(IdCouleur, pageable);
     }
 
-    public List<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdTypeAnnonce(Integer IdTypeAnnonce) {
-        return v_annonce_complet_current_monthRepository.findByIdTypeAnnonce(IdTypeAnnonce);
+    public Page<V_annonce_complet_current_month> getV_annonce_complet_current_monthByIdTypeAnnonce(Integer IdTypeAnnonce, Pageable pageable) {
+        return v_annonce_complet_current_monthRepository.findByIdTypeAnnonce(IdTypeAnnonce, pageable);
     }
 
     // Add your service methods here

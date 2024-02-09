@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.Taille;
 import com.vente.voiture.crud.repository.TailleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class TailleService {
     }
 
     // Read
-    public List<Taille> getAllTaille() {
-        return (List<Taille>) tailleRepository.findAll();
+    public List<Taille> getAlltaille() {
+        return tailleRepository.findAll();
+    }
+
+    // Read
+    public Page<Taille> getAllTaille(Pageable pageable) {
+        return tailleRepository.findAll(pageable);
     }
 
     // GetById

@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.TypeMoteur;
 import com.vente.voiture.crud.repository.TypeMoteurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class TypeMoteurService {
     }
 
     // Read
-    public List<TypeMoteur> getAllTypeMoteur() {
-        return (List<TypeMoteur>) type_moteurRepository.findAll();
+    public List<TypeMoteur> getAlltype_moteur() {
+        return type_moteurRepository.findAll();
+    }
+
+    // Read
+    public Page<TypeMoteur> getAllTypeMoteur(Pageable pageable) {
+        return type_moteurRepository.findAll(pageable);
     }
 
     // GetById

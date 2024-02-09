@@ -3,6 +3,9 @@ package com.vente.voiture.crud.controller;
 import com.vente.voiture.crud.model.V_count_annonce_vendu_current_month;
 import java.util.*;
 import com.vente.voiture.crud.service.V_count_annonce_vendu_current_monthService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +18,39 @@ public class V_count_annonce_vendu_current_monthController {
     private V_count_annonce_vendu_current_monthService v_count_annonce_vendu_current_monthService;
 
     @GetMapping
-    public List<V_count_annonce_vendu_current_month> getAllV_count_annonce_vendu_current_month() {
-        return v_count_annonce_vendu_current_monthService.getAllV_count_annonce_vendu_current_month();
+    public Response getAllV_count_annonce_vendu_current_month() {
+        Response response = new Response();
+        try{
+            response.setDataOnSuccess(v_count_annonce_vendu_current_monthService.getAllV_count_annonce_vendu_current_month());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPageV_count_annonce_vendu_current_month( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(v_count_annonce_vendu_current_monthService.getAllV_count_annonce_vendu_current_month(pageable));
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
     }
 
     @GetMapping("/{id}")
-    public Optional<V_count_annonce_vendu_current_month> getV_count_annonce_vendu_current_monthById(@PathVariable Long id) {
-        return v_count_annonce_vendu_current_monthService.getV_count_annonce_vendu_current_monthById(id);
+    public Response getV_count_annonce_vendu_current_monthById(@PathVariable Long id) {
+        Response response = new Response();
+        try{
+            response.setDataOnSuccess(v_count_annonce_vendu_current_monthService.getV_count_annonce_vendu_current_monthById(id));
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
     }
 
 

@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.EtatAnnonce;
 import com.vente.voiture.crud.repository.EtatAnnonceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class EtatAnnonceService {
     }
 
     // Read
-    public List<EtatAnnonce> getAllEtatAnnonce() {
-        return (List<EtatAnnonce>) etat_annonceRepository.findAll();
+    public List<EtatAnnonce> getAlletat_annonce() {
+        return etat_annonceRepository.findAll();
+    }
+
+    // Read
+    public Page<EtatAnnonce> getAllEtatAnnonce(Pageable pageable) {
+        return etat_annonceRepository.findAll(pageable);
     }
 
     // GetById
@@ -40,8 +47,8 @@ public class EtatAnnonceService {
         etat_annonceRepository.deleteById(id);
     }
 
-    public List<EtatAnnonce> getEtatAnnonceByIdAnnonce(Integer IdAnnonce) {
-        return etat_annonceRepository.findByIdAnnonce(IdAnnonce);
+    public Page<EtatAnnonce> getEtatAnnonceByIdAnnonce(Integer IdAnnonce, Pageable pageable) {
+        return etat_annonceRepository.findByIdAnnonce(IdAnnonce, pageable);
     }
 
     // Add your service methods here

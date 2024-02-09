@@ -2,38 +2,42 @@ package com.vente.voiture.crud.repository;
 
 import com.vente.voiture.crud.model.Annonce;
 import org.springframework.data.jpa.repository.Query;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AnnonceRepository extends JpaRepository<Annonce, Long> {
-    @Query("SELECT pa FROM annonce pa WHERE pa.IdModele = ?1")
-   List<Annonce> findByIdModele(Integer IdModele);
+    @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdModele = ?1")
+   Page<Annonce> findByIdModele(Integer IdModele, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdMarque = ?1")
-   List<Annonce> findByIdMarque(Integer IdMarque);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdMarque = ?1")
+   Page<Annonce> findByIdMarque(Integer IdMarque, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdTypeMoteur = ?1")
-   List<Annonce> findByIdTypeMoteur(Integer IdTypeMoteur);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdTypeMoteur = ?1")
+   Page<Annonce> findByIdTypeMoteur(Integer IdTypeMoteur, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdUsers = ?1")
-   List<Annonce> findByIdUsers(Integer IdUsers);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdUsers = ?1")
+   Page<Annonce> findByIdUsers(Integer IdUsers, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdEnergie = ?1")
-   List<Annonce> findByIdEnergie(Integer IdEnergie);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdEnergie = ?1")
+   Page<Annonce> findByIdEnergie(Integer IdEnergie, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdTransmission = ?1")
-   List<Annonce> findByIdTransmission(Integer IdTransmission);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdTransmission = ?1")
+   Page<Annonce> findByIdTransmission(Integer IdTransmission, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdUsage = ?1")
-   List<Annonce> findByIdUsage(Integer IdUsage);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdUsage = ?1")
+   Page<Annonce> findByIdUsage(Integer IdUsage, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdCouleur = ?1")
-   List<Annonce> findByIdCouleur(Integer IdCouleur);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdCouleur = ?1")
+   Page<Annonce> findByIdCouleur(Integer IdCouleur, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdTaille = ?1")
-   List<Annonce> findByIdTaille(Integer IdTaille);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdTaille = ?1")
+   Page<Annonce> findByIdTaille(Integer IdTaille, Pageable pageable);
 
-   @Query("SELECT pa FROM annonce pa WHERE pa.IdTypeAnnonce = ?1")
-   List<Annonce> findByIdTypeAnnonce(Integer IdTypeAnnonce);
+   @Query("SELECT tbl FROM annonce tbl WHERE tbl.IdTypeAnnonce = ?1")
+   Page<Annonce> findByIdTypeAnnonce(Integer IdTypeAnnonce, Pageable pageable);
+
+   @Query("SELECT tbl FROM annonce tbl")
+   Page<Annonce> findAll(Pageable pageable);
 
 }

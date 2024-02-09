@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.V_annonce_complet_ordered_by_type_annonce;
 import com.vente.voiture.crud.repository.V_annonce_complet_ordered_by_type_annonceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +15,12 @@ public class V_annonce_complet_ordered_by_type_annonceService {
 
     // Read
     public List<V_annonce_complet_ordered_by_type_annonce> getAllV_annonce_complet_ordered_by_type_annonce() {
-        return (List<V_annonce_complet_ordered_by_type_annonce>) v_annonce_complet_ordered_by_type_annonceRepository.findAll();
+        return v_annonce_complet_ordered_by_type_annonceRepository.findAll();
+    }
+
+    // Read
+    public Page<V_annonce_complet_ordered_by_type_annonce> getAllV_annonce_complet_ordered_by_type_annonce(Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findAll(pageable);
     }
 
     // GetById
@@ -21,44 +28,44 @@ public class V_annonce_complet_ordered_by_type_annonceService {
         return v_annonce_complet_ordered_by_type_annonceRepository.findById(id);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdModele(Integer IdModele) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdModele(IdModele);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdModele(Integer IdModele, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdModele(IdModele, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdMarque(Integer IdMarque) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdMarque(IdMarque);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdMarque(Integer IdMarque, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdMarque(IdMarque, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdTypeMoteur(Integer IdTypeMoteur) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdTypeMoteur(IdTypeMoteur);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdTypeMoteur(Integer IdTypeMoteur, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdTypeMoteur(IdTypeMoteur, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdTaille(Integer IdTaille) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdTaille(IdTaille);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdTaille(Integer IdTaille, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdTaille(IdTaille, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdUsers(Integer IdUsers) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdUsers(IdUsers);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdUsers(Integer IdUsers, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdUsers(IdUsers, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdEnergie(Integer IdEnergie) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdEnergie(IdEnergie);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdEnergie(Integer IdEnergie, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdEnergie(IdEnergie, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdTransmission(Integer IdTransmission) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdTransmission(IdTransmission);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdTransmission(Integer IdTransmission, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdTransmission(IdTransmission, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdUsage(Integer IdUsage) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdUsage(IdUsage);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdUsage(Integer IdUsage, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdUsage(IdUsage, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdCouleur(Integer IdCouleur) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdCouleur(IdCouleur);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdCouleur(Integer IdCouleur, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdCouleur(IdCouleur, pageable);
     }
 
-    public List<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdTypeAnnonce(Integer IdTypeAnnonce) {
-        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdTypeAnnonce(IdTypeAnnonce);
+    public Page<V_annonce_complet_ordered_by_type_annonce> getV_annonce_complet_ordered_by_type_annonceByIdTypeAnnonce(Integer IdTypeAnnonce, Pageable pageable) {
+        return v_annonce_complet_ordered_by_type_annonceRepository.findByIdTypeAnnonce(IdTypeAnnonce, pageable);
     }
 
     // Add your service methods here

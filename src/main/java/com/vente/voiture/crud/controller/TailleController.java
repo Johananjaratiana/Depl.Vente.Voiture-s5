@@ -2,6 +2,8 @@ package com.vente.voiture.crud.controller;
 
 import com.vente.voiture.crud.model.Taille;
 import com.vente.voiture.crud.service.TailleService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
@@ -31,10 +33,24 @@ public class TailleController {
     }
 
     @GetMapping
-    public Response getAllTaille() {
+    public Response getAlltaille() {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(tailleService.getAllTaille());
+            response.setDataOnSuccess(tailleService.getAlltaille());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPagetaille( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(tailleService.getAllTaille(pageable));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }

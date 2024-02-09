@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.V_stat_annonce_vendu_par_marque;
 import com.vente.voiture.crud.repository.V_stat_annonce_vendu_par_marqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +15,12 @@ public class V_stat_annonce_vendu_par_marqueService {
 
     // Read
     public List<V_stat_annonce_vendu_par_marque> getAllV_stat_annonce_vendu_par_marque() {
-        return (List<V_stat_annonce_vendu_par_marque>) v_stat_annonce_vendu_par_marqueRepository.findAll();
+        return v_stat_annonce_vendu_par_marqueRepository.findAll();
+    }
+
+    // Read
+    public Page<V_stat_annonce_vendu_par_marque> getAllV_stat_annonce_vendu_par_marque(Pageable pageable) {
+        return v_stat_annonce_vendu_par_marqueRepository.findAll(pageable);
     }
 
     // GetById
@@ -21,8 +28,8 @@ public class V_stat_annonce_vendu_par_marqueService {
         return v_stat_annonce_vendu_par_marqueRepository.findById(id);
     }
 
-    public List<V_stat_annonce_vendu_par_marque> getV_stat_annonce_vendu_par_marqueByIdMarque(Integer IdMarque) {
-        return v_stat_annonce_vendu_par_marqueRepository.findByIdMarque(IdMarque);
+    public Page<V_stat_annonce_vendu_par_marque> getV_stat_annonce_vendu_par_marqueByIdMarque(Integer IdMarque, Pageable pageable) {
+        return v_stat_annonce_vendu_par_marqueRepository.findByIdMarque(IdMarque, pageable);
     }
 
     // Add your service methods here

@@ -73,15 +73,15 @@ public class DataCreatorController {
         Response response = new Response();
         try{
             DataCreator dataCreator = new DataCreator();
-            dataCreator.setMarque(marqueService.getAllMarque());
-            dataCreator.setModele(modeleService.getAllModele());
-            dataCreator.setCouleur(couleurService.getAllCouleur());
-            dataCreator.setTaille(tailleService.getAllTaille());
-            dataCreator.setUsage(usageService.getAllUsage());
-            dataCreator.setEnergie(energieService.getAllEnergie());
-            dataCreator.setTransmission(transmissionService.getAllTransmission());
-            dataCreator.setTypeAnnonce(typeAnnonceService.getAllTypeAnnonce());
-            dataCreator.setTypeMoteur(typeMoteurService.getAllTypeMoteur());
+            dataCreator.setMarque(marqueService.getAllmarque());
+            dataCreator.setModele(modeleService.getAllmodele());
+            dataCreator.setCouleur(couleurService.getAllcouleur());
+            dataCreator.setTaille(tailleService.getAlltaille());
+            dataCreator.setUsage(usageService.getAllusage());
+            dataCreator.setEnergie(energieService.getAllenergie());
+            dataCreator.setTransmission(transmissionService.getAlltransmission());
+            dataCreator.setTypeAnnonce(typeAnnonceService.getAlltype_annonce());
+            dataCreator.setTypeMoteur(typeMoteurService.getAlltype_moteur());
 
             response.setDataOnSuccess(dataCreator);
         }catch(Exception ex){

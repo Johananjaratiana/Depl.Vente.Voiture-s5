@@ -1,6 +1,7 @@
 package com.vente.voiture.function.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +52,7 @@ public class Pdp_Controller {
         Response response = new Response();
         try{
             Users users = jwtTokenUtil.validateTokenReturningUsers(usersService, authorizationHeader);
-            response.setDataOnSuccess(pdpService.getPdpByIdUsers(users.getId().intValue()));
+            response.setDataOnSuccess(pdpService.getPdpByIdUsers(users.getId().intValue(), PageRequest.of(0, 10)));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }

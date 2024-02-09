@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.ProfilUtilisateur;
 import com.vente.voiture.crud.repository.ProfilUtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class ProfilUtilisateurService {
     }
 
     // Read
-    public List<ProfilUtilisateur> getAllProfilUtilisateur() {
-        return (List<ProfilUtilisateur>) profil_utilisateurRepository.findAll();
+    public List<ProfilUtilisateur> getAllprofil_utilisateur() {
+        return profil_utilisateurRepository.findAll();
+    }
+
+    // Read
+    public Page<ProfilUtilisateur> getAllProfilUtilisateur(Pageable pageable) {
+        return profil_utilisateurRepository.findAll(pageable);
     }
 
     // GetById

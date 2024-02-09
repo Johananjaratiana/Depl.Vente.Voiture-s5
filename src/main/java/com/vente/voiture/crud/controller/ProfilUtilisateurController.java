@@ -2,6 +2,8 @@ package com.vente.voiture.crud.controller;
 
 import com.vente.voiture.crud.model.ProfilUtilisateur;
 import com.vente.voiture.crud.service.ProfilUtilisateurService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
@@ -31,10 +33,24 @@ public class ProfilUtilisateurController {
     }
 
     @GetMapping
-    public Response getAllProfilUtilisateur() {
+    public Response getAllprofil_utilisateur() {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(profil_utilisateurService.getAllProfilUtilisateur());
+            response.setDataOnSuccess(profil_utilisateurService.getAllprofil_utilisateur());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPageprofil_utilisateur( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(profil_utilisateurService.getAllProfilUtilisateur(pageable));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }

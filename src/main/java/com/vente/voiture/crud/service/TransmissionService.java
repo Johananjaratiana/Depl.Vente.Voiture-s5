@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.Transmission;
 import com.vente.voiture.crud.repository.TransmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class TransmissionService {
     }
 
     // Read
-    public List<Transmission> getAllTransmission() {
-        return (List<Transmission>) transmissionRepository.findAll();
+    public List<Transmission> getAlltransmission() {
+        return transmissionRepository.findAll();
+    }
+
+    // Read
+    public Page<Transmission> getAllTransmission(Pageable pageable) {
+        return transmissionRepository.findAll(pageable);
     }
 
     // GetById

@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.Energie;
 import com.vente.voiture.crud.repository.EnergieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class EnergieService {
     }
 
     // Read
-    public List<Energie> getAllEnergie() {
-        return (List<Energie>) energieRepository.findAll();
+    public List<Energie> getAllenergie() {
+        return energieRepository.findAll();
+    }
+
+    // Read
+    public Page<Energie> getAllEnergie(Pageable pageable) {
+        return energieRepository.findAll(pageable);
     }
 
     // GetById

@@ -114,77 +114,9 @@ INSERT INTO "public".annonce
     3, 100 );
 
 
-CREATE VIEW "public".v_annonce_complet AS  SELECT a.id,
-    a.id_marque,
-    a.id_modele,
-    a.version,
-    a.nb_place,
-    a.description,
-    a.prix_vente,
-    a.consommation,
-    a.nb_vitesse,
-    a.id_type_moteur,
-    a.puissance,
-    a.id_type_annonce,
-    a.date_annonce,
-    a.status,
-    a.id_users,
-    a.id_energie,
-    a.id_transmission,
-    a.id_usage,
-    a.id_taille,
-    a.km_effectue,
-    a.id_couleur,
-    a.numero,
-    ma.nom AS nom_marque,
-    mo.nom AS nom_modele,
-    tm.nom AS nom_type_moteur,
-    ta.nom AS nom_type_annonce,
-    ta.commission AS commission_type_annonce,
-    ta.niveau AS niveau_type_annonce,
-    u.nom AS nom_users,
-    u.prenom AS prenom_users,
-    u.email AS email_users,
-    u.telephone AS telephone_users,
-    e.nom AS nom_energie,
-    t.nom AS nom_transmission,
-    us.nom AS nom_usage,
-    tai.nom AS nom_taille,
-    COALESCE(ea.carrosserie, 0) AS etat_carrosserie,
-    COALESCE(ea.siege, 0) AS etat_siege,
-    COALESCE(ea.tableau_bord, 0) AS etat_tableau_bord,
-    COALESCE(ea.moteur, 0) AS etat_moteur,
-    COALESCE(ea.freinage, 0) AS etat_freinage,
-    COALESCE(ea.transmission, 0) AS etat_transmission,
-    COALESCE(ea.pneu, 0) AS etat_pneu,
-    COALESCE(ea.electronique, 0) AS etat_electronique,
-    COALESCE(ea.suspension, 0) AS etat_suspension,
-    c.nom AS nom_couleur,
-    c.rgb AS rgb_couleur,
-    ( SELECT pa.image
-           FROM photo_annonce pa
-          WHERE (pa.id_annonce = a.id)
-          ORDER BY pa.id
-         LIMIT 1) AS image
-   FROM (((((((((((annonce a
-     JOIN marque ma ON ((ma.id = a.id_marque)))
-     JOIN modele mo ON ((mo.id = a.id_modele)))
-     JOIN type_moteur tm ON ((tm.id = a.id_type_moteur)))
-     JOIN type_annonce ta ON ((ta.id = a.id_type_annonce)))
-     JOIN users u ON ((u.id = a.id_users)))
-     JOIN energie e ON ((e.id = a.id_energie)))
-     JOIN transmission t ON ((t.id = a.id_transmission)))
-     JOIN usage us ON ((us.id = a.id_usage)))
-     JOIN taille tai ON ((tai.id = a.id_taille)))
-     LEFT JOIN etat_annonce ea ON ((a.id = ea.id_annonce)))
-     JOIN couleur c ON ((c.id = a.id_couleur)));
-
-CREATE VIEW "public".v_annonce_vendu_current_month AS  
-SELECT v_annonce_complet.*,
-    (v_annonce_complet.prix_vente * v_annonce_complet.commission_type_annonce) AS commission_obtenue
-   FROM v_annonce_complet
-  WHERE (v_annonce_complet.status = 20)
-  AND (EXTRACT(month FROM date_annonce) = EXTRACT(month FROM CURRENT_DATE))
-  ORDER BY v_annonce_complet.date_annonce DESC;
+------------------------- IN REQUEST 
+SELECT string_agg(id_annonce::text, ',') AS id_annonces
+    FROM annonce_favoris
+    WHERE id_users =  6;
 
 

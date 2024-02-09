@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.Pdp;
 import com.vente.voiture.crud.repository.PdpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class PdpService {
     }
 
     // Read
-    public List<Pdp> getAllPdp() {
-        return (List<Pdp>) pdpRepository.findAll();
+    public List<Pdp> getAllpdp() {
+        return pdpRepository.findAll();
+    }
+
+    // Read
+    public Page<Pdp> getAllPdp(Pageable pageable) {
+        return pdpRepository.findAll(pageable);
     }
 
     // GetById
@@ -40,8 +47,8 @@ public class PdpService {
         pdpRepository.deleteById(id);
     }
 
-    public List<Pdp> getPdpByIdUsers(Integer IdUsers) {
-        return pdpRepository.findByIdUsers(IdUsers);
+    public Page<Pdp> getPdpByIdUsers(Integer IdUsers, Pageable pageable) {
+        return pdpRepository.findByIdUsers(IdUsers, pageable);
     }
 
     // Add your service methods here

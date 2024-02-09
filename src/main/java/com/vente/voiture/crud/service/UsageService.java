@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.Usage;
 import com.vente.voiture.crud.repository.UsageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class UsageService {
     }
 
     // Read
-    public List<Usage> getAllUsage() {
-        return (List<Usage>) usageRepository.findAll();
+    public List<Usage> getAllusage() {
+        return usageRepository.findAll();
+    }
+
+    // Read
+    public Page<Usage> getAllUsage(Pageable pageable) {
+        return usageRepository.findAll(pageable);
     }
 
     // GetById

@@ -2,6 +2,8 @@ package com.vente.voiture.crud.controller;
 
 import com.vente.voiture.crud.model.PhotoAnnonce;
 import com.vente.voiture.crud.service.PhotoAnnonceService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
@@ -31,10 +33,24 @@ public class PhotoAnnonceController {
     }
 
     @GetMapping
-    public Response getAllPhotoAnnonce() {
+    public Response getAllphoto_annonce() {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(photo_annonceService.getAllPhotoAnnonce());
+            response.setDataOnSuccess(photo_annonceService.getAllphoto_annonce());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPagephoto_annonce( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(photo_annonceService.getAllPhotoAnnonce(pageable));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }
@@ -79,11 +95,14 @@ public class PhotoAnnonceController {
 
 
     @GetMapping("annonce/{id_annonce}")
-    public Response getPhotoAnnonceByIdAnnonce(@PathVariable Integer id_annonce) {
+    public Response getPhotoAnnonceByIdAnnonce(@PathVariable Integer id_annonce, 
+             @RequestParam(defaultValue = "0") int page,
+             @RequestParam(defaultValue = "10") int size) {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(photo_annonceService.getPhotoAnnonceByIdAnnonce(id_annonce));
-        }catch(Exception ex){
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(photo_annonceService.getPhotoAnnonceByIdAnnonce(id_annonce, pageable)); 
+         }catch(Exception ex){
             response.setError(ex.getMessage());
         }
         return response;

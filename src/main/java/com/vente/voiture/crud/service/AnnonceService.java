@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.Annonce;
 import com.vente.voiture.crud.repository.AnnonceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class AnnonceService {
     }
 
     // Read
-    public List<Annonce> getAllAnnonce() {
-        return (List<Annonce>) annonceRepository.findAll();
+    public List<Annonce> getAllannonce() {
+        return annonceRepository.findAll();
+    }
+
+    // Read
+    public Page<Annonce> getAllAnnonce(Pageable pageable) {
+        return annonceRepository.findAll(pageable);
     }
 
     // GetById
@@ -40,44 +47,44 @@ public class AnnonceService {
         annonceRepository.deleteById(id);
     }
 
-    public List<Annonce> getAnnonceByIdModele(Integer IdModele) {
-        return annonceRepository.findByIdModele(IdModele);
+    public Page<Annonce> getAnnonceByIdModele(Integer IdModele, Pageable pageable) {
+        return annonceRepository.findByIdModele(IdModele, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdMarque(Integer IdMarque) {
-        return annonceRepository.findByIdMarque(IdMarque);
+    public Page<Annonce> getAnnonceByIdMarque(Integer IdMarque, Pageable pageable) {
+        return annonceRepository.findByIdMarque(IdMarque, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdTypeMoteur(Integer IdTypeMoteur) {
-        return annonceRepository.findByIdTypeMoteur(IdTypeMoteur);
+    public Page<Annonce> getAnnonceByIdTypeMoteur(Integer IdTypeMoteur, Pageable pageable) {
+        return annonceRepository.findByIdTypeMoteur(IdTypeMoteur, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdUsers(Integer IdUsers) {
-        return annonceRepository.findByIdUsers(IdUsers);
+    public Page<Annonce> getAnnonceByIdUsers(Integer IdUsers, Pageable pageable) {
+        return annonceRepository.findByIdUsers(IdUsers, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdEnergie(Integer IdEnergie) {
-        return annonceRepository.findByIdEnergie(IdEnergie);
+    public Page<Annonce> getAnnonceByIdEnergie(Integer IdEnergie, Pageable pageable) {
+        return annonceRepository.findByIdEnergie(IdEnergie, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdTransmission(Integer IdTransmission) {
-        return annonceRepository.findByIdTransmission(IdTransmission);
+    public Page<Annonce> getAnnonceByIdTransmission(Integer IdTransmission, Pageable pageable) {
+        return annonceRepository.findByIdTransmission(IdTransmission, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdUsage(Integer IdUsage) {
-        return annonceRepository.findByIdUsage(IdUsage);
+    public Page<Annonce> getAnnonceByIdUsage(Integer IdUsage, Pageable pageable) {
+        return annonceRepository.findByIdUsage(IdUsage, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdCouleur(Integer IdCouleur) {
-        return annonceRepository.findByIdCouleur(IdCouleur);
+    public Page<Annonce> getAnnonceByIdCouleur(Integer IdCouleur, Pageable pageable) {
+        return annonceRepository.findByIdCouleur(IdCouleur, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdTaille(Integer IdTaille) {
-        return annonceRepository.findByIdTaille(IdTaille);
+    public Page<Annonce> getAnnonceByIdTaille(Integer IdTaille, Pageable pageable) {
+        return annonceRepository.findByIdTaille(IdTaille, pageable);
     }
 
-    public List<Annonce> getAnnonceByIdTypeAnnonce(Integer IdTypeAnnonce) {
-        return annonceRepository.findByIdTypeAnnonce(IdTypeAnnonce);
+    public Page<Annonce> getAnnonceByIdTypeAnnonce(Integer IdTypeAnnonce, Pageable pageable) {
+        return annonceRepository.findByIdTypeAnnonce(IdTypeAnnonce, pageable);
     }
 
     // Add your service methods here

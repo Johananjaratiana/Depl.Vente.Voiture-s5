@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.V_count_annonce_vendu_current_year;
 import com.vente.voiture.crud.repository.V_count_annonce_vendu_current_yearRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +15,12 @@ public class V_count_annonce_vendu_current_yearService {
 
     // Read
     public List<V_count_annonce_vendu_current_year> getAllV_count_annonce_vendu_current_year() {
-        return (List<V_count_annonce_vendu_current_year>) v_count_annonce_vendu_current_yearRepository.findAll();
+        return v_count_annonce_vendu_current_yearRepository.findAll();
+    }
+
+    // Read
+    public Page<V_count_annonce_vendu_current_year> getAllV_count_annonce_vendu_current_year(Pageable pageable) {
+        return v_count_annonce_vendu_current_yearRepository.findAll(pageable);
     }
 
     // GetById

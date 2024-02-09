@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.V_annonce_en_attente_validation;
 import com.vente.voiture.crud.repository.V_annonce_en_attente_validationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +15,12 @@ public class V_annonce_en_attente_validationService {
 
     // Read
     public List<V_annonce_en_attente_validation> getAllV_annonce_en_attente_validation() {
-        return (List<V_annonce_en_attente_validation>) v_annonce_en_attente_validationRepository.findAll();
+        return v_annonce_en_attente_validationRepository.findAll();
+    }
+
+    // Read
+    public Page<V_annonce_en_attente_validation> getAllV_annonce_en_attente_validation(Pageable pageable) {
+        return v_annonce_en_attente_validationRepository.findAll(pageable);
     }
 
     // GetById

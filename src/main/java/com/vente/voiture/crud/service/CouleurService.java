@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.Couleur;
 import com.vente.voiture.crud.repository.CouleurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class CouleurService {
     }
 
     // Read
-    public List<Couleur> getAllCouleur() {
-        return (List<Couleur>) couleurRepository.findAll();
+    public List<Couleur> getAllcouleur() {
+        return couleurRepository.findAll();
+    }
+
+    // Read
+    public Page<Couleur> getAllCouleur(Pageable pageable) {
+        return couleurRepository.findAll(pageable);
     }
 
     // GetById

@@ -2,6 +2,8 @@ package com.vente.voiture.crud.controller;
 
 import com.vente.voiture.crud.model.TypeAnnonce;
 import com.vente.voiture.crud.service.TypeAnnonceService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
@@ -31,10 +33,24 @@ public class TypeAnnonceController {
     }
 
     @GetMapping
-    public Response getAllTypeAnnonce() {
+    public Response getAlltype_annonce() {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(type_annonceService.getAllTypeAnnonce());
+            response.setDataOnSuccess(type_annonceService.getAlltype_annonce());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPagetype_annonce( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(type_annonceService.getAllTypeAnnonce(pageable));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }

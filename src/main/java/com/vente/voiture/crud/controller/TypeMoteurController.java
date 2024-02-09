@@ -2,6 +2,8 @@ package com.vente.voiture.crud.controller;
 
 import com.vente.voiture.crud.model.TypeMoteur;
 import com.vente.voiture.crud.service.TypeMoteurService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
@@ -31,10 +33,24 @@ public class TypeMoteurController {
     }
 
     @GetMapping
-    public Response getAllTypeMoteur() {
+    public Response getAlltype_moteur() {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(type_moteurService.getAllTypeMoteur());
+            response.setDataOnSuccess(type_moteurService.getAlltype_moteur());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPagetype_moteur( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(type_moteurService.getAllTypeMoteur(pageable));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }

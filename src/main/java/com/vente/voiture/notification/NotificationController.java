@@ -3,6 +3,8 @@ package com.vente.voiture.notification;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,8 +48,9 @@ public class NotificationController {
         try{
             Users users = jwtTokenUtil.validateTokenReturningUsers(usersService, authorizationHeader);
             Integer recipientId = Integer.parseInt(notificationMessage.getRecipientToken());
-            List<UserNotification> userNotifications= userNotificationService.getUserNotificationByIdUsers(recipientId);
-            
+            Page<UserNotification> pageUserNotifications= userNotificationService.getUserNotificationByIdUsers(recipientId, PageRequest.of(0, 10));
+            List<UserNotification> userNotifications = pageUserNotifications.toList();
+
             if(userNotifications.size() == 0){
                 throw new Exception("Le récépteur ne peut pas recevoir la notification de votre message pour le moment.");
             } else {

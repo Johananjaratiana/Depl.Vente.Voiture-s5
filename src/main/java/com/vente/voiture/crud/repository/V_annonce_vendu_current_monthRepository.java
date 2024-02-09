@@ -2,38 +2,42 @@ package com.vente.voiture.crud.repository;
 
 import com.vente.voiture.crud.model.V_annonce_vendu_current_month;
 import org.springframework.data.jpa.repository.Query;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface V_annonce_vendu_current_monthRepository extends JpaRepository<V_annonce_vendu_current_month, Long> {
-    @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdTypeMoteur = ?1")
-   List<V_annonce_vendu_current_month> findByIdTypeMoteur(Integer IdTypeMoteur);
+    @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdTypeMoteur = ?1")
+   Page<V_annonce_vendu_current_month> findByIdTypeMoteur(Integer IdTypeMoteur, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdTaille = ?1")
-   List<V_annonce_vendu_current_month> findByIdTaille(Integer IdTaille);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdTaille = ?1")
+   Page<V_annonce_vendu_current_month> findByIdTaille(Integer IdTaille, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdTransmission = ?1")
-   List<V_annonce_vendu_current_month> findByIdTransmission(Integer IdTransmission);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdTransmission = ?1")
+   Page<V_annonce_vendu_current_month> findByIdTransmission(Integer IdTransmission, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdCouleur = ?1")
-   List<V_annonce_vendu_current_month> findByIdCouleur(Integer IdCouleur);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdCouleur = ?1")
+   Page<V_annonce_vendu_current_month> findByIdCouleur(Integer IdCouleur, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdTypeAnnonce = ?1")
-   List<V_annonce_vendu_current_month> findByIdTypeAnnonce(Integer IdTypeAnnonce);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdTypeAnnonce = ?1")
+   Page<V_annonce_vendu_current_month> findByIdTypeAnnonce(Integer IdTypeAnnonce, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdModele = ?1")
-   List<V_annonce_vendu_current_month> findByIdModele(Integer IdModele);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdModele = ?1")
+   Page<V_annonce_vendu_current_month> findByIdModele(Integer IdModele, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdMarque = ?1")
-   List<V_annonce_vendu_current_month> findByIdMarque(Integer IdMarque);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdMarque = ?1")
+   Page<V_annonce_vendu_current_month> findByIdMarque(Integer IdMarque, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdUsers = ?1")
-   List<V_annonce_vendu_current_month> findByIdUsers(Integer IdUsers);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdUsers = ?1")
+   Page<V_annonce_vendu_current_month> findByIdUsers(Integer IdUsers, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdEnergie = ?1")
-   List<V_annonce_vendu_current_month> findByIdEnergie(Integer IdEnergie);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdEnergie = ?1")
+   Page<V_annonce_vendu_current_month> findByIdEnergie(Integer IdEnergie, Pageable pageable);
 
-   @Query("SELECT pa FROM v_annonce_vendu_current_month pa WHERE pa.IdUsage = ?1")
-   List<V_annonce_vendu_current_month> findByIdUsage(Integer IdUsage);
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl WHERE tbl.IdUsage = ?1")
+   Page<V_annonce_vendu_current_month> findByIdUsage(Integer IdUsage, Pageable pageable);
+
+   @Query("SELECT tbl FROM v_annonce_vendu_current_month tbl")
+   Page<V_annonce_vendu_current_month> findAll(Pageable pageable);
 
 }

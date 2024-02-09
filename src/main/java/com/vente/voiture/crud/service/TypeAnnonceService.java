@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.TypeAnnonce;
 import com.vente.voiture.crud.repository.TypeAnnonceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class TypeAnnonceService {
     }
 
     // Read
-    public List<TypeAnnonce> getAllTypeAnnonce() {
-        return (List<TypeAnnonce>) type_annonceRepository.findAll();
+    public List<TypeAnnonce> getAlltype_annonce() {
+        return type_annonceRepository.findAll();
+    }
+
+    // Read
+    public Page<TypeAnnonce> getAllTypeAnnonce(Pageable pageable) {
+        return type_annonceRepository.findAll(pageable);
     }
 
     // GetById

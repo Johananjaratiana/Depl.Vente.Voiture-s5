@@ -2,6 +2,8 @@ package com.vente.voiture.crud.controller;
 
 import com.vente.voiture.crud.model.Pdp;
 import com.vente.voiture.crud.service.PdpService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
@@ -31,10 +33,24 @@ public class PdpController {
     }
 
     @GetMapping
-    public Response getAllPdp() {
+    public Response getAllpdp() {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(pdpService.getAllPdp());
+            response.setDataOnSuccess(pdpService.getAllpdp());
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/pages")
+    public Response getAllInPagepdp( 
+             @RequestParam(defaultValue = "0") int page, 
+             @RequestParam(defaultValue = "10") int size) { 
+        Response response = new Response();
+        try{
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(pdpService.getAllPdp(pageable));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }
@@ -79,11 +95,14 @@ public class PdpController {
 
 
     @GetMapping("users/{id_users}")
-    public Response getPdpByIdUsers(@PathVariable Integer id_users) {
+    public Response getPdpByIdUsers(@PathVariable Integer id_users, 
+             @RequestParam(defaultValue = "0") int page,
+             @RequestParam(defaultValue = "10") int size) {
         Response response = new Response();
         try{
-            response.setDataOnSuccess(pdpService.getPdpByIdUsers(id_users));
-        }catch(Exception ex){
+            Pageable pageable = PageRequest.of(page, size); 
+             response.setDataOnSuccess(pdpService.getPdpByIdUsers(id_users, pageable)); 
+         }catch(Exception ex){
             response.setError(ex.getMessage());
         }
         return response;

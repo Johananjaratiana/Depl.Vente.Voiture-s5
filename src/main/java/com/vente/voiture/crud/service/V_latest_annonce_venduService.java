@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.V_latest_annonce_vendu;
 import com.vente.voiture.crud.repository.V_latest_annonce_venduRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +15,12 @@ public class V_latest_annonce_venduService {
 
     // Read
     public List<V_latest_annonce_vendu> getAllV_latest_annonce_vendu() {
-        return (List<V_latest_annonce_vendu>) v_latest_annonce_venduRepository.findAll();
+        return v_latest_annonce_venduRepository.findAll();
+    }
+
+    // Read
+    public Page<V_latest_annonce_vendu> getAllV_latest_annonce_vendu(Pageable pageable) {
+        return v_latest_annonce_venduRepository.findAll(pageable);
     }
 
     // GetById
@@ -21,44 +28,44 @@ public class V_latest_annonce_venduService {
         return v_latest_annonce_venduRepository.findById(id);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdTypeMoteur(Integer IdTypeMoteur) {
-        return v_latest_annonce_venduRepository.findByIdTypeMoteur(IdTypeMoteur);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdTypeMoteur(Integer IdTypeMoteur, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdTypeMoteur(IdTypeMoteur, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdTaille(Integer IdTaille) {
-        return v_latest_annonce_venduRepository.findByIdTaille(IdTaille);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdTaille(Integer IdTaille, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdTaille(IdTaille, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdTransmission(Integer IdTransmission) {
-        return v_latest_annonce_venduRepository.findByIdTransmission(IdTransmission);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdTransmission(Integer IdTransmission, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdTransmission(IdTransmission, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdCouleur(Integer IdCouleur) {
-        return v_latest_annonce_venduRepository.findByIdCouleur(IdCouleur);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdCouleur(Integer IdCouleur, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdCouleur(IdCouleur, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdTypeAnnonce(Integer IdTypeAnnonce) {
-        return v_latest_annonce_venduRepository.findByIdTypeAnnonce(IdTypeAnnonce);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdTypeAnnonce(Integer IdTypeAnnonce, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdTypeAnnonce(IdTypeAnnonce, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdModele(Integer IdModele) {
-        return v_latest_annonce_venduRepository.findByIdModele(IdModele);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdModele(Integer IdModele, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdModele(IdModele, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdMarque(Integer IdMarque) {
-        return v_latest_annonce_venduRepository.findByIdMarque(IdMarque);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdMarque(Integer IdMarque, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdMarque(IdMarque, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdUsers(Integer IdUsers) {
-        return v_latest_annonce_venduRepository.findByIdUsers(IdUsers);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdUsers(Integer IdUsers, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdUsers(IdUsers, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdEnergie(Integer IdEnergie) {
-        return v_latest_annonce_venduRepository.findByIdEnergie(IdEnergie);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdEnergie(Integer IdEnergie, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdEnergie(IdEnergie, pageable);
     }
 
-    public List<V_latest_annonce_vendu> getV_latest_annonce_venduByIdUsage(Integer IdUsage) {
-        return v_latest_annonce_venduRepository.findByIdUsage(IdUsage);
+    public Page<V_latest_annonce_vendu> getV_latest_annonce_venduByIdUsage(Integer IdUsage, Pageable pageable) {
+        return v_latest_annonce_venduRepository.findByIdUsage(IdUsage, pageable);
     }
 
     // Add your service methods here

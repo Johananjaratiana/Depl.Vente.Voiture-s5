@@ -4,6 +4,8 @@ import com.vente.voiture.crud.model.AnnonceFavoris;
 import com.vente.voiture.crud.repository.AnnonceFavorisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,13 @@ public class AnnonceFavorisService {
     }
 
     // Read
-    public List<AnnonceFavoris> getAllAnnonceFavoris() {
-        return (List<AnnonceFavoris>) annonce_favorisRepository.findAll();
+    public List<AnnonceFavoris> getAllannonce_favoris() {
+        return annonce_favorisRepository.findAll();
+    }
+
+    // Read
+    public Page<AnnonceFavoris> getAllAnnonceFavoris(Pageable pageable) {
+        return annonce_favorisRepository.findAll(pageable);
     }
 
     // GetById
@@ -40,12 +47,12 @@ public class AnnonceFavorisService {
         annonce_favorisRepository.deleteById(id);
     }
 
-    public List<AnnonceFavoris> getAnnonceFavorisByIdAnnonce(Integer IdAnnonce) {
-        return annonce_favorisRepository.findByIdAnnonce(IdAnnonce);
+    public Page<AnnonceFavoris> getAnnonceFavorisByIdAnnonce(Integer IdAnnonce, Pageable pageable) {
+        return annonce_favorisRepository.findByIdAnnonce(IdAnnonce, pageable);
     }
 
-    public List<AnnonceFavoris> getAnnonceFavorisByIdUsers(Integer IdUsers) {
-        return annonce_favorisRepository.findByIdUsers(IdUsers);
+    public Page<AnnonceFavoris> getAnnonceFavorisByIdUsers(Integer IdUsers, Pageable pageable) {
+        return annonce_favorisRepository.findByIdUsers(IdUsers, pageable);
     }
 
     // Add your service methods here
