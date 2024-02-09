@@ -22,7 +22,7 @@ import com.vente.voiture.ws.structure.Response;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/api/notification")
+@RequestMapping("/api")
 public class NotificationController {
     
     @Autowired
@@ -37,12 +37,12 @@ public class NotificationController {
     @Autowired
     UserNotificationService userNotificationService;
 
-    @PostMapping("/xposdff_adfvqepovuqadfae;lka;aiq[pvalgkvlqn")
+    @PostMapping("/notification/xposdff_adfvqepovuqadfae;lka;aiq[pvalgkvlqn")
     public String SendNotificationByToken(@RequestBody NotificationMessage notificationMessage){
         return firebaseMessagingService.SendNotificationByToken(notificationMessage);
     }
 
-    @PostMapping("/send_by_current_user")
+    @PostMapping("/notification/send_by_current_user")
     public Response SendRealNotificationMessage(@RequestBody NotificationMessage notificationMessage, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         Response response = new Response();
         try{
