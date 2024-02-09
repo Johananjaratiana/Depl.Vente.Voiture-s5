@@ -7,6 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import com.vente.voiture.ws.structure.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
+import com.vente.voiture.ws.security.user.Users;
+import com.vente.voiture.ws.security.user.UsersService;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 
@@ -14,8 +17,12 @@ import org.springframework.http.HttpHeaders;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/annonces")
 public class AnnonceController {
+
     @Autowired
     private AnnonceService annonceService;
+
+    @Autowired
+    private UsersService usersService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -26,6 +33,19 @@ public class AnnonceController {
         try{
             jwtTokenUtil.validateToken(authorizationHeader);
             response.setDataOnSuccess(annonceService.save(Annonce));
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+    @GetMapping("/isFavorite/{id_annonce}")
+    public Response IsFavorite(
+            @PathVariable Integer id_annonce, 
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        Response response = new Response();
+        try{
+            Users users = jwtTokenUtil.validateTokenReturningUsers(usersService, authorizationHeader);
+            response.setDataOnSuccess(annonceService.isFavorite(id_annonce, users));
         }catch(Exception ex){
             response.setError(ex.getMessage());
         }

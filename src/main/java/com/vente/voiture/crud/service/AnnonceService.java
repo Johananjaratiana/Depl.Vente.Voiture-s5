@@ -2,6 +2,8 @@ package com.vente.voiture.crud.service;
 
 import com.vente.voiture.crud.model.Annonce;
 import com.vente.voiture.crud.repository.AnnonceRepository;
+import com.vente.voiture.ws.security.user.Users;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import org.springframework.data.domain.Pageable;
@@ -85,6 +87,11 @@ public class AnnonceService {
 
     public Page<Annonce> getAnnonceByIdTypeAnnonce(Integer IdTypeAnnonce, Pageable pageable) {
         return annonceRepository.findByIdTypeAnnonce(IdTypeAnnonce, pageable);
+    }
+
+    public Boolean isFavorite(Integer id_annonce, Users users) {
+        List<Object> ls = annonceRepository.findByIdAnnonceAndIdUsers(id_annonce.longValue(), users.getId());
+        return (ls.size() > 0) ? true : false;
     }
 
     // Add your service methods here
