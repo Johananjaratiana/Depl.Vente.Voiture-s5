@@ -2,6 +2,8 @@ package com.vente.voiture.crud.service;
 
 import com.vente.voiture.crud.model.AnnonceFavoris;
 import com.vente.voiture.crud.repository.AnnonceFavorisRepository;
+import com.vente.voiture.ws.security.user.Users;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import org.springframework.data.domain.Pageable;
@@ -56,5 +58,10 @@ public class AnnonceFavorisService {
     }
 
     // Add your service methods here
+
+    public AnnonceFavoris isFavorite(Integer id_annonce, Users users) {
+        List<AnnonceFavoris> annonceFavoris = annonce_favorisRepository.findByIdAnnonceAndIdUsers(id_annonce.longValue(), users.getId());
+        return (annonceFavoris.size() > 0) ? annonceFavoris.get(0) : null;
+    }
 
 }

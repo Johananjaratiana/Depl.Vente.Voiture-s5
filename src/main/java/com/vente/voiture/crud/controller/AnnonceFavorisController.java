@@ -39,6 +39,20 @@ public class AnnonceFavorisController {
         return response;
     }
 
+    @GetMapping("/isFavorite/{id_annonce}")
+    public Response IsFavorite(
+            @PathVariable Integer id_annonce, 
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        Response response = new Response();
+        try{
+            Users users = jwtTokenUtil.validateTokenReturningUsers(usersService, authorizationHeader);
+            response.setDataOnSuccess(annonce_favorisService.isFavorite(id_annonce, users));
+        }catch(Exception ex){
+            response.setError(ex.getMessage());
+        }
+        return response;
+    }
+
     @GetMapping
     public Response getAllannonce_favoris() {
         Response response = new Response();
