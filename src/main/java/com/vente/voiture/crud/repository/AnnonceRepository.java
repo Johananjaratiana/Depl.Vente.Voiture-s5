@@ -1,6 +1,8 @@
 package com.vente.voiture.crud.repository;
 
 import com.vente.voiture.crud.model.Annonce;
+import com.vente.voiture.crud.model.AnnonceFavoris;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.domain.Pageable;
 
@@ -46,5 +48,5 @@ public interface AnnonceRepository extends JpaRepository<Annonce, Long> {
    @Query(value =   "SELECT tbl FROM annonce_favoris tbl " +
                     "   WHERE tbl.id_annonce = :idAnnonce " +
                     "   AND tbl.id_users = :idUsers ", nativeQuery = true)
-   List<Object> findByIdAnnonceAndIdUsers(Long idAnnonce, Long idUsers);
+   List<AnnonceFavoris> findByIdAnnonceAndIdUsers(Long idAnnonce, Long idUsers);
 }

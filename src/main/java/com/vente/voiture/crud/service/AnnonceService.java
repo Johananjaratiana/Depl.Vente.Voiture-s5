@@ -1,6 +1,7 @@
 package com.vente.voiture.crud.service;
 
 import com.vente.voiture.crud.model.Annonce;
+import com.vente.voiture.crud.model.AnnonceFavoris;
 import com.vente.voiture.crud.repository.AnnonceRepository;
 import com.vente.voiture.ws.security.user.Users;
 
@@ -89,9 +90,9 @@ public class AnnonceService {
         return annonceRepository.findByIdTypeAnnonce(IdTypeAnnonce, pageable);
     }
 
-    public Boolean isFavorite(Integer id_annonce, Users users) {
-        List<Object> ls = annonceRepository.findByIdAnnonceAndIdUsers(id_annonce.longValue(), users.getId());
-        return (ls.size() > 0) ? true : false;
+    public Integer isFavorite(Integer id_annonce, Users users) {
+        List<AnnonceFavoris> annonceFavoris = annonceRepository.findByIdAnnonceAndIdUsers(id_annonce.longValue(), users.getId());
+        return (annonceFavoris.size() > 0) ? annonceFavoris.get(0).getId().intValue() : null;
     }
 
     // Add your service methods here

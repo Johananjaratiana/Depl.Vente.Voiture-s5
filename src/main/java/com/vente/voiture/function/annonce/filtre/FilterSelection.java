@@ -36,49 +36,49 @@ public class FilterSelection {
     
         if (marque != null && marque.length > 0) {
             if(sqlWhere.length() > 0)sqlWhere.append(" AND ");
-            sqlWhere.append(" marque IN (" + String.join(",", Collections.nCopies(marque.length, "?")) + ") ");    
+            sqlWhere.append(" id_marque IN (" + String.join(",", Collections.nCopies(marque.length, "?")) + ") ");    
             params.addAll(Arrays.asList(marque));
         }
     
         if (modele != null && modele.length > 0) {
             if(sqlWhere.length() > 0)sqlWhere.append(" AND ");
-            sqlWhere.append(" modele IN (" + String.join(",", Collections.nCopies(modele.length, "?")) + ") ");    
+            sqlWhere.append(" id_modele IN (" + String.join(",", Collections.nCopies(modele.length, "?")) + ") ");    
             params.addAll(Arrays.asList(modele));
         }
     
         if (energie != null && energie.length > 0) {
             if(sqlWhere.length() > 0)sqlWhere.append(" AND ");
-            sqlWhere.append(" energie IN (" + String.join(",", Collections.nCopies(energie.length, "?")) + ") ");    
+            sqlWhere.append(" id_energie IN (" + String.join(",", Collections.nCopies(energie.length, "?")) + ") ");    
             params.addAll(Arrays.asList(energie));
         }
     
         if (transmission != null && transmission.length > 0) {
             if(sqlWhere.length() > 0)sqlWhere.append(" AND ");
-            sqlWhere.append(" transmission IN (" + String.join(",", Collections.nCopies(transmission.length, "?")) + ") ");    
+            sqlWhere.append(" id_transmission IN (" + String.join(",", Collections.nCopies(transmission.length, "?")) + ") ");    
             params.addAll(Arrays.asList(transmission));
         }
     
         if (taille != null && taille.length > 0) {
             if(sqlWhere.length() > 0)sqlWhere.append(" AND ");
-            sqlWhere.append(" taille IN (" + String.join(",", Collections.nCopies(taille.length, "?")) + ") ");    
+            sqlWhere.append(" id_taille IN (" + String.join(",", Collections.nCopies(taille.length, "?")) + ") ");    
             params.addAll(Arrays.asList(taille));
         }
     
         if (type_moteur != null && type_moteur.length > 0) {
             if(sqlWhere.length() > 0)sqlWhere.append(" AND ");
-            sqlWhere.append(" type_moteur IN (" + String.join(",", Collections.nCopies(type_moteur.length, "?")) + ") ");    
+            sqlWhere.append(" id_type_moteur IN (" + String.join(",", Collections.nCopies(type_moteur.length, "?")) + ") ");    
             params.addAll(Arrays.asList(type_moteur));
         }
     
         if (couleur != null && couleur.length > 0) {
             if(sqlWhere.length() > 0)sqlWhere.append(" AND ");
-            sqlWhere.append(" couleur IN (" + String.join(",", Collections.nCopies(couleur.length, "?")) + ") ");    
+            sqlWhere.append(" id_couleur IN (" + String.join(",", Collections.nCopies(couleur.length, "?")) + ") ");    
             params.addAll(Arrays.asList(couleur));
         }
     
         if (usage != null && usage.length > 0) {
             if(sqlWhere.length() > 0)sqlWhere.append(" AND ");
-            sqlWhere.append(" usage IN (" + String.join(",", Collections.nCopies(usage.length, "?")) + ") ");    
+            sqlWhere.append(" id_usage IN (" + String.join(",", Collections.nCopies(usage.length, "?")) + ") ");    
             params.addAll(Arrays.asList(usage));
         }
         
