@@ -20,7 +20,7 @@ public interface AnnonceFavorisRepository extends JpaRepository<AnnonceFavoris, 
    Page<AnnonceFavoris> findAll(Pageable pageable);
 
 
-   @Query(value =   "SELECT tbl FROM annonce_favoris tbl " +
+   @Query(value =   "SELECT tbl.* FROM annonce_favoris tbl " +
                     "   WHERE tbl.id_annonce = :idAnnonce " +
                     "   AND tbl.id_users = :idUsers ", nativeQuery = true)
    List<AnnonceFavoris> findByIdAnnonceAndIdUsers(Long idAnnonce, Long idUsers);
