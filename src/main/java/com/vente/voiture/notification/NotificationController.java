@@ -22,7 +22,7 @@ import com.vente.voiture.ws.structure.Response;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/notification")
+@RequestMapping("/api/notification")
 public class NotificationController {
     
     @Autowired
