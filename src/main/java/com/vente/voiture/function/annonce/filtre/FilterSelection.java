@@ -172,6 +172,7 @@ public class FilterSelection {
                 temp.setEtatSuspension(resultSet.getInt("etat_suspension"));
                 temp.setNomCouleur(resultSet.getString("nom_couleur"));
                 temp.setRgbCouleur(resultSet.getString("rgb_couleur"));
+                temp.setImage(resultSet.getString("image"));
                 result.add(temp);
             }
         } catch (Exception e) {

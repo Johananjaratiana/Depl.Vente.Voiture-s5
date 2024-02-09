@@ -2,6 +2,7 @@ package com.vente.voiture.crud.repository;
 
 import com.vente.voiture.crud.model.V_annonce_complet;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.domain.Page;
@@ -60,4 +61,20 @@ public interface V_annonce_completRepository extends JpaRepository<V_annonce_com
                     "           WHERE id_users =  :userId " +
                     " ) ", nativeQuery = true)
    Page<V_annonce_complet> findFavorisByUsersId(Integer userId, Pageable pageable);
+
+   @Query(value = "SELECT tbl.* FROM v_annonce_complet tbl WHERE " +
+                  "status =  10 AND " +
+                  "to_tsvector('french', " +
+                  "coalesce(tbl.nom_marque, '') || ' ' || " +
+                  "coalesce(tbl.nom_modele, '') || ' ' || " +
+                  "coalesce(tbl.description, '') || ' ' || " +
+                  "coalesce(tbl.nom_users, '') || ' ' || " +
+                  "coalesce(tbl.nom_transmission, '') || ' ' || " +
+                  "coalesce(tbl.nom_usage, '') || ' ' || " +
+                  "coalesce(tbl.nom_taille, '') || ' ' || " +
+                  "coalesce(tbl.nom_couleur, '') || ' ' || " +
+                  "coalesce(tbl.nom_type_moteur, '') || ' ' || " +
+                  "coalesce(tbl.nom_type_annonce, '')" +
+                  ") @@ to_tsquery('french', :searchTerm)", nativeQuery = true)
+   Page<V_annonce_complet> fullTextSearch(@Param("searchTerm") String searchTerm, Pageable pageable);
 }
