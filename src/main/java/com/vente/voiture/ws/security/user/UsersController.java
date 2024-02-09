@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 
+import com.vente.voiture.crud.service.V_user_completService;
 import com.vente.voiture.ws.security.token.JwtTokenUtil;
 import com.vente.voiture.ws.security.token.Token;
 import com.vente.voiture.ws.structure.Response;
@@ -26,6 +27,9 @@ public class UsersController {
 
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private V_user_completService user_completService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -42,7 +46,7 @@ public class UsersController {
                 String token = jwtTokenUtil.generateToken(Integer.valueOf(user.getId().toString()));
                 HashMap<String, Object> result = new HashMap<>();
                 result.put("token", new Token(token, true));
-                result.put("users", user);
+                result.put("users", user_completService.getV_user_completById(user.getId()));
                 response.setDataOnSuccess(result);
             }
             else 

@@ -238,7 +238,7 @@ public class V_annonce_completController {
         }
     
         @GetMapping("/non_vendu")
-        public Response getV_annonce_completNonVendu( 
+        public Response getV_annonce_completNonVendu(
                 @RequestParam(defaultValue = "0") int page,
                 @RequestParam(defaultValue = "10") int size) {
             Response response = new Response();
